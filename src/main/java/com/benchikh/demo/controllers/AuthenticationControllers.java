@@ -3,6 +3,7 @@ package com.benchikh.demo.controllers;
 
 import com.benchikh.demo.config.JwtUtil;
 import com.benchikh.demo.dto.AuthenticationRequest;
+import com.benchikh.demo.dto.AuthenticationResponse;
 import com.benchikh.demo.model.Customer;
 import com.benchikh.demo.repository.CustomerRepository;
 import com.benchikh.demo.services.CustomerService;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RequestMapping("/api/v1/auth")
 public class AuthenticationControllers {
-
     private final JwtUtil jwtUtil;
     private final CustomerRepository customerRepository;
     private final CustomerService customerService;
@@ -31,8 +31,8 @@ public class AuthenticationControllers {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody Customer customer) {
-        return ResponseEntity.ok(jwtUtil.generateToken(customerService.saveCustomer(customer)));
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody Customer customer) {
+        return ResponseEntity.ok(customerService.saveCustomer(customer));
     }
     @PostMapping("/authenticate")
     public ResponseEntity<String> authenticate(@RequestBody AuthenticationRequest request) {
@@ -45,6 +45,5 @@ public class AuthenticationControllers {
              return ResponseEntity.ok(jwtUtil.generateToken(user));
          return ResponseEntity.status(400).body("An error was occured");
     }
-
 
 }
